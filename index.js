@@ -1,14 +1,14 @@
 const drawTreeMap = (data) => {
-  const categories = data.map(d => d.name)
+  const categories = data.children.map(d => d.name)
   const graphWidth = 1200
-  const graphHeight = 600
+  const graphHeight = 450
   const paddingBottom = 125
   const paddingLeft = 80
   const paddingRight = 50
   const paddingTop =50
-  const barWidth = 3.3
+  const rectPadding = 30
   const svgWidth = graphWidth + paddingLeft + paddingRight
-  const svgHeight = graphHeight + paddingBottom + paddingTop
+  const svgHeight = graphHeight + paddingBottom + paddingTop + rectPadding
   const svg = d3.select('svg')
                 .attr('width', svgWidth)
                 .attr('height', svgHeight)
@@ -59,10 +59,32 @@ const drawTreeMap = (data) => {
         .style('font-size', '0.9rem')
         .attr('text-anchor', 'start')
         .attr('dy', 'center')
+
+  const root = d3.hierarchy(data).sum(d => d.value)
+  const treemap = d3.treemap()
+                    .size([graphWidth, graphHeight])
+                    .padding(1)
+  treemap(root)
+
+  const graph = svg.append('g')
+                   .attr('id', 'graph')
+                   .attr('width', graphWidth)
+                   .attr('height', graphHeight)
+                   .attr('transform', `translate(${paddingRight}, ${paddingTop})`)
+
+  graph.selectAll('rect')
+       .data(root.leaves())
+       .join('rect')
+        .attr('x', d => d.x0)
+        .attr('y', d => d.y0)
+        .attr('width', d => d.x1 - d.x0)
+        .attr('height', d => d.y1 - d.y0)
+        .style("fill", d => colorScale(d.data.category))
+
 }
 
 fetch('https://cdn.freecodecamp.org/testable-projects-fcc/data/tree_map/video-game-sales-data.json')
   .then(resp => resp.json())
   .then(resp => {
-    drawTreeMap(resp.children)
+    drawTreeMap(resp)
   })
