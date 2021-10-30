@@ -1,5 +1,5 @@
 const drawTreeMap = (data) => {
-  const graphWidth = 1200
+  const graphWidth = 960
   const graphHeight = 450
   const paddingBottom = 125
   const paddingLeft = 80
@@ -57,16 +57,21 @@ const drawTreeMap = (data) => {
     .data(root.leaves())
     .join('g')
     .attr('transform', d => `translate(${d.x0}, ${d.y0})`)
+
   rects.append('rect')
     .attr('width', d => d.x1 - d.x0)
     .attr('height', d => d.y1 - d.y0)
     .style("fill", d => colorScale(d.data.category))
 
   rects.append('text')
-    .text(d => d.data.name)
     .attr('font-size', '11px')
-    .attr('y', 11)
-    .attr('x', 3)
+    .selectAll('tspan')
+    .data(d => d.data.name.split(' '))
+    .join('tspan')
+      .text(d => d)
+      .attr('x', 3)
+      .attr('y', (_, i) => i*10 + 11)
+
 
   const legendWidth = graphWidth / 2
   const legendHeight = paddingBottom
@@ -81,6 +86,7 @@ const drawTreeMap = (data) => {
     .join('g')
     .classed('legend', true)
     .attr('transform', (_, i) => `translate(${i%3 * (legendWidth/3)}, ${parseInt(i/3) * legendHeight/6 })`)
+
   legend.append('rect')
     .attr('width', 16)
     .attr('height', 16)
@@ -88,6 +94,7 @@ const drawTreeMap = (data) => {
     .attr('transform', () => {
       return `translate(-20, -12)`
     })
+
   legend.append('text')
     .text(d => d)
     .style('font-size', '0.9rem')
