@@ -63,7 +63,11 @@ const drawTreeMap = (data) => {
   rects.append('rect')
     .attr('width', d => d.x1 - d.x0)
     .attr('height', d => d.y1 - d.y0)
+    .classed('tile', true)
     .style("fill", d => colorScale(d.data.category))
+    .attr('data-name', d => d.data.name)
+    .attr('data-category', d => d.data.category)
+    .attr('data-value', d => d.data.value)
 
   rects.append('text')
     .attr('font-size', '11px')
@@ -96,6 +100,7 @@ const drawTreeMap = (data) => {
     .attr('transform', () => {
       return `translate(-20, -12)`
     })
+    .classed('legend-item', true)
 
   legend.append('text')
     .text(d => d)
@@ -120,6 +125,7 @@ const tooltipMouseMove = function(e, d){
       return `${e.clientY - height/2}px`
     })
     .style('opacity', '0.8')
+    .attr('data-value', d.data.value)
 
     d3.select(this).style('cursor', 'pointer')
 }
