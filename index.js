@@ -46,7 +46,6 @@ const drawTreeMap = (data) => {
 
   treemap(root)
 
-  console.log(root)
   const graph = svg.append('g')
     .attr('id', 'graph')
     .attr('width', graphWidth)
@@ -57,6 +56,8 @@ const drawTreeMap = (data) => {
     .data(root.leaves())
     .join('g')
     .attr('transform', d => `translate(${d.x0}, ${d.y0})`)
+    .on('mousemove', tooltipMouseMove)
+    .on('mouseout', tooltipMouseOut)
 
   rects.append('rect')
     .attr('width', d => d.x1 - d.x0)
@@ -101,7 +102,32 @@ const drawTreeMap = (data) => {
     .attr('text-anchor', 'start')
     .attr('dy', 'center')
 }
+const tooltip = d3.select('#tooltip')
 
+const tooltipMouseMove = function(e, d){
+  tooltip
+    .html(`
+      Name: ${d.data.name}
+      <br/>
+      Category: ${d.data.category}
+      <br/>
+      Value: ${d.data.value}
+    `)
+    .style('left', `${e.clientX + 20}px`)
+    .style('top', () => {
+      const { height } = tooltip.node().getBoundingClientRect()
+      return `${e.clientY - height/2}px`
+    })
+    .style('opacity', '0.8')
+
+    d3.select(this).style('cursor', 'pointer')
+}
+
+const tooltipMouseOut = function() {
+  tooltip.style('opacity', 0)
+         .style('left', 0)
+         .style('top', 0)
+}
 
 fetch('https://cdn.freecodecamp.org/testable-projects-fcc/data/tree_map/video-game-sales-data.json')
   .then(resp => resp.json())
