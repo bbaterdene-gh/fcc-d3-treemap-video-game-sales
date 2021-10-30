@@ -1,10 +1,10 @@
 const drawTreeMap = (data) => {
-  const graphWidth = 960
-  const graphHeight = 450
+  const graphWidth = 920
+  const graphHeight = 500
   const paddingBottom = 125
   const paddingLeft = 80
   const paddingRight = 50
-  const paddingTop = 50
+  const paddingTop = 20
   const rectPadding = 30
   const svgWidth = graphWidth + paddingLeft + paddingRight
   const svgHeight = graphHeight + paddingBottom + paddingTop + rectPadding
@@ -56,6 +56,7 @@ const drawTreeMap = (data) => {
     .data(root.leaves())
     .join('g')
     .attr('transform', d => `translate(${d.x0}, ${d.y0})`)
+    .attr('overflow', 'hidden')
     .on('mousemove', tooltipMouseMove)
     .on('mouseout', tooltipMouseOut)
 
@@ -67,7 +68,7 @@ const drawTreeMap = (data) => {
   rects.append('text')
     .attr('font-size', '11px')
     .selectAll('tspan')
-    .data(d => d.data.name.split(' '))
+    .data(d => d.data.name.split(/(?=[A-Z][a-z-]+)/))
     .join('tspan')
       .text(d => d)
       .attr('x', 3)
