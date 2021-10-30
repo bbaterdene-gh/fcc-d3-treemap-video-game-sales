@@ -1,0 +1,36 @@
+#main {
+  background-color: #708090;
+  font-family: "Roboto";
+}
+
+#container {
+  box-shadow: 0px 2px 14px 1px rgba(0,0,0,0.75);
+  -webkit-box-shadow: 0px 2px 14px 1px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 2px 14px 1px rgba(0,0,0,0.75);
+  background-color: #ffffff;
+}
+
+#title {
+  font-size: 3rem;
+  text-align: center;
+}
+
+#graph {
+  margin-bottom: 2rem;
+}
+
+#tooltip {
+  display: flex;
+  background: lightsteelblue;
+  width: 150px;
+  height: 50px;
+  position: absolute;
+  box-shadow: 1px 1px 10px;
+  border-radius: 2px;
+  padding: 2px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  opacity: 0;
+  font-family: 'Roboto';
+}
